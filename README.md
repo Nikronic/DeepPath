@@ -2,7 +2,7 @@
 
 ## NOTICE
 
-_**In this fork, I fixed some issues and changed implementation based on the reference 3, but still default code runs the original implementation. (For running my implementation, explicit flagging needed)**_
+_**In this fork, I fixed some issues and changed implementation based on the reference 3 (salesforce), but still default code runs the original implementation. (For running my implementation, explicit flagging needed)**_
 
 We study the problem of learning to reason in large scale knowledge graphs (KGs). More specifically, we describe a novel reinforcement learning framework for learning multi-hop relational paths: we use a policy-based agent with continuous states based on knowledge graph embeddings, which reasons in a KG vector-space by sampling the most promising relation to extend its path. In contrast to prior work, our approach includes a reward function that takes the **accuracy**, **diversity**, and **efficiency** into consideration. Experimentally, we show that our proposed method outperforms a path-ranking based algorithm and knowledge graph embedding methods on Freebase and Never-Ending Language Learning datasets.
 
@@ -58,3 +58,7 @@ Download the knowledge graph dataset [NELL-995](http://cs.ucsb.edu/~xwhan/datase
 ## Acknowledgments
 * [TransX implementations by thunlp](https://github.com/thunlp/Fast-TransX)
 * [Ni Lao's PRA code](http://www.cs.cmu.edu/~nlao/)
+* [Embedding Score (reward function)](https://github.com/salesforce/MultiHopKG)
+All "enhancements" codes borrowed from [Salesforce's MultiHopKG code](https://github.com/salesforce/MultiHopKG)
+All "enhancements" ideas borrowed from [Salesforce's MultiHopKG paper](https://arxiv.org/abs/1808.10568)
+
