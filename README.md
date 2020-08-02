@@ -6,6 +6,11 @@ _**In this fork, I fixed some issues and changed implementation based on the ref
 
 We study the problem of learning to reason in large scale knowledge graphs (KGs). More specifically, we describe a novel reinforcement learning framework for learning multi-hop relational paths: we use a policy-based agent with continuous states based on knowledge graph embeddings, which reasons in a KG vector-space by sampling the most promising relation to extend its path. In contrast to prior work, our approach includes a reward function that takes the **accuracy**, **diversity**, and **efficiency** into consideration. Experimentally, we show that our proposed method outperforms a path-ranking based algorithm and knowledge graph embedding methods on Freebase and Never-Ending Language Learning datasets.
 
+## Requirements
+  * `numpy`
+  * `tensorflow ~=1.13.x` Note that tensorflow above `1.13.x` will not work.
+  * `python 2.7` Code does not work with Python 3 currently.
+
 ## Access the dataset
 Download the knowledge graph dataset [NELL-995](http://cs.ucsb.edu/~xwhan/datasets/NELL-995.zip) [FB15k-237](https://drive.google.com/file/d/1klWL11nW3ZS6b2MtLW0MHnXu-XlJqDyA/view?usp=sharing)
 
@@ -50,6 +55,6 @@ Download the knowledge graph dataset [NELL-995](http://cs.ucsb.edu/~xwhan/datase
 }
 ```
 
-## Acknowledgement
+## Acknowledgments
 * [TransX implementations by thunlp](https://github.com/thunlp/Fast-TransX)
 * [Ni Lao's PRA code](http://www.cs.cmu.edu/~nlao/)
