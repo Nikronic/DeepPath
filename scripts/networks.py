@@ -1,6 +1,6 @@
-import tensorflow as tf 
+import tensorflow as tf
 
-def policy_nn(state, state_dim, action_dim, initializer):
+def policy_nn(state, state_dim, action_dim, initializer, dropout=False):
 	w1 = tf.get_variable('W1', [state_dim, 512], initializer = initializer, regularizer=tf.contrib.layers.l2_regularizer(0.01))
 	b1 = tf.get_variable('b1', [512], initializer = tf.constant_initializer(0.0))
 	h1 = tf.nn.relu(tf.matmul(state, w1) + b1)
@@ -9,7 +9,13 @@ def policy_nn(state, state_dim, action_dim, initializer):
 	h2 = tf.nn.relu(tf.matmul(h1, w2) + b2)
 	w3 = tf.get_variable('w3', [1024, action_dim], initializer = initializer, regularizer=tf.contrib.layers.l2_regularizer(0.01))
 	b3 = tf.get_variable('b3', [action_dim], initializer = tf.constant_initializer(0.0))
-	action_prob = tf.nn.softmax(tf.matmul(h2,w3) + b3)
+
+	if dropout:
+		h3 = tf.matmul(h2,w3) + b3
+		h3 = tf.nn.dropout(h3, rate=0.1)  # works like an e-greedy but for path continuity.
+		tf.nn.softmax(h3 + b3)
+	else:
+		action_prob = tf.nn.softmax(tf.matmul(h2,w3) + b3)
 	return action_prob
 
 def value_nn(state, state_dim, initializer):
