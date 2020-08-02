@@ -4,7 +4,7 @@ import sys
 import numpy as np
 from BFS.KB import *
 from sklearn import linear_model
-from keras.models import Sequential 
+from keras.models import Sequential
 from keras.layers import Dense, Activation
 
 relation = sys.argv[1]
@@ -38,7 +38,7 @@ def train(kb, kb_inv, named_paths):
 	input_dim = len(named_paths)
 	model.add(Dense(1, activation='sigmoid' ,input_dim=input_dim))
 	model.compile(optimizer = 'rmsprop', loss='binary_crossentropy', metrics=['accuracy'])
-	model.fit(training_features, train_labels, nb_epoch=300, batch_size=128)
+	model.fit(np.array(training_features), np.array(train_labels), nb_epoch=300, batch_size=128)
 	return model
 
 def get_features():
@@ -112,12 +112,12 @@ def evaluate_logic():
 	f.close()
 	test_pairs = []
 	test_labels = []
-	# queries = set()
+
 	for line in test_data:
 		e1 = line.split(',')[0].replace('thing$','')
-		# e1 = '/' + e1[0] + '/' + e1[2:]
+
 		e2 = line.split(',')[1].split(':')[0].replace('thing$','')
-		# e2 = '/' + e2[0] + '/' + e2[2:]
+
 		if (e1 not in kb.entities) or (e2 not in kb.entities):
 			continue
 		test_pairs.append((e1,e2))
@@ -132,16 +132,12 @@ def evaluate_logic():
 	score_all = []
 
 	for idx, sample in enumerate(test_pairs):
-		#print 'query node: ', sample[0], idx
 		if sample[0] == query:
 			features = []
 			for path in named_paths:
 				features.append(int(bfs_two(sample[0], sample[1], path, kb, kb_inv)))
 
-			#features = features*path_weights
-
 			score = model.predict(np.reshape(features, [1,-1]))
-			#score = np.sum(features)
 
 			score_all.append(score[0])
 			y_score.append(score)
@@ -161,25 +157,17 @@ def evaluate_logic():
 				aps.append(0)
 			else:
 				aps.append(np.mean(ranks))
-			#print np.mean(ranks)
-			# if len(aps) % 10 == 0:
-			# 	print 'How many queries:', len(aps)
-			# 	print np.mean(aps)
 			y_true = []
 			y_score = []
 			features = []
 			for path in named_paths:
 				features.append(int(bfs_two(sample[0], sample[1], path, kb, kb_inv)))
 
-			#features = features*path_weights
-			#score = np.inner(features, path_weights)
-			#score = np.sum(features)
 			score = model.predict(np.reshape(features,[1,-1]))
 
 			score_all.append(score[0])
 			y_score.append(score)
 			y_true.append(test_labels[idx])
-			# print y_score, y_true
 
 	count = zip(y_score, y_true)
 	count.sort(key = lambda x:x[0], reverse=True)
@@ -218,24 +206,16 @@ def bfs_two(e1,e2,path,kb,kb_inv):
 		if len(left) < len(right):
 			left_path.append(left_step)
 			start += 1
-			#print 'left',start
-			# for triple in kb:
-			# 	if triple[2] == left_step and triple[0] in left:
-			# 		left_next.add(triple[1])
-			# left = left_next
 			for entity in left:
 				try:
 					for path_ in kb.getPathsFrom(entity):
 						if path_.relation == left_step:
 							left_next.add(path_.connected_entity)
 				except Exception as e:
-					# print 'left', len(left)
-					# print left
-					# print 'not such entity'
 					return False
 			left = left_next
 
-		else: 
+		else:
 			right_path.append(right_step)
 			end -= 1
 			for entity in right:
@@ -244,13 +224,11 @@ def bfs_two(e1,e2,path,kb,kb_inv):
 						if path_.relation == right_step:
 							right_next.add(path_.connected_entity)
 				except Exception as e:
-					# print 'right', len(right)
-					# print 'no such entity'
 					return False
 			right = right_next
 
 	if len(right & left) != 0:
-		return True 
+		return True
 	return False
 
 
